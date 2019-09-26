@@ -72,5 +72,12 @@ find_package_handle_standard_args(UFE
     REQUIRED_VARS
         UFE_INCLUDE_DIR
         UFE_LIBRARY
+    VERSION_VAR
         UFE_VERSION
 )
+
+if(UFE_FOUND)
+    message(STATUS "UFE include dir: ${UFE_INCLUDE_DIR}")
+    message(STATUS "UFE library: ${UFE_LIBRARY}")
+    message(STATUS "UFE version: ${UFE_VERSION}")
+endif()

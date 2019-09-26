@@ -33,13 +33,14 @@ find_package(PythonInterp)
 # find_package(MayaUSD REQUIRED)
 
 if(CMAKE_WANT_UFE_BUILD)
-    add_definitions(-DWANT_UFE_BUILD)
-
-    find_package(UFE REQUIRED)
-    include_directories(${UFE_INCLUDE_DIR})
-
-    message("UFE Build Enabled")
-    message("Using UFE version : ${UFE_VERSION}")
+    find_package(UFE QUIET)
+    if(UFE_FOUND)
+        message(STATUS "Building with UFE ${UFE_VERSION} features enabled.")
+        include_directories(${UFE_INCLUDE_DIR})
+        add_definitions(-DWANT_UFE_BUILD)
+    else()
+        message(STATUS "UFE not found. UFE features will be disabled.")
+    endif()
 endif()
 
 # FindBoost is particularly buggy, and doesn't like custom boost locations.
@@ -119,7 +120,7 @@ if(NOT SKIP_USDMAYA_TESTS)
     endif()
 
     # https://gitlab.kitware.com/cmake/cmake/issues/17799
-    # FindGtest is buggy when dealing with Debug build. 
+    # FindGtest is buggy when dealing with Debug build.
     if (CMAKE_BUILD_TYPE MATCHES Debug AND GTEST_FOUND MATCHES FALSE)
         message("Setting GTest libraries with debug...")
 
@@ -163,7 +164,7 @@ add_subdirectory(utils)
 add_subdirectory(usdutils)
 if(NOT SKIP_USDMAYA_TESTS)
   add_subdirectory(mayatest)
-endif() 
+endif()
 add_subdirectory(mayautils)
 add_subdirectory(usdmayautils)
 
